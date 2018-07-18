@@ -44,9 +44,9 @@ module.exports = express()
     const { token } = req.query;
 
     if (token === fb.FB_ACCESS_TOKEN) {
-      return res.json({ queue: queue.inspect() });
+      return res.status(200).json({ queue: queue.inspect() });
     } else {
-      return res.json({ error: 'Invalid token.' });
+      return res.status(403).json({ error: 'Invalid token.' });
     }
   })
   // Check latest errors (requires token)
@@ -56,7 +56,7 @@ module.exports = express()
     if (token === fb.FB_ACCESS_TOKEN) {
       return res.json({ errors: queue.getErrors() });
     } else {
-      return res.json({ error: 'Invalid token.' });
+      return res.status(403).json({ error: 'Invalid token.' });
     }
   })
   // Handles messages sent to chat bot on FB
@@ -92,11 +92,11 @@ module.exports = express()
 
     return queue
       .enqueue(messages)
-      .then(() => res.json({ status: 'ok' }))
+      .then(() => res.status(200).json({ status: 'ok' }))
       .catch(err => {
         console.log('Something went wrong!', err);
 
-        return res.json({ error: err });
+        return res.status(500).json({ error: err });
       })
       .then(() => queue.process(createAndSendGif))
       .catch(err => {
