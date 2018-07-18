@@ -26,6 +26,8 @@ module.exports = express()
   // Parse incoming request bodies in a middleware before your handlers
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }))
+  // For testing API
+  .get('/ping', (req, res) => res.json({ message: 'Pong!' }))
   // Sets up webhook to sync with FB
   .get('/webhook', (req, res) => {
     const { query = {} } = req;
