@@ -4,7 +4,7 @@ const { first, reduce } = require('lodash');
 const gif = require('./helpers/gif');
 const fb = require('./helpers/fb');
 const queue = require('./helpers/queue');
-const { wait, isVideo } = require('./helpers/utils');
+const { isVideo } = require('./helpers/utils');
 
 const PORT = process.env.PORT || 1337;
 const VERIFY_TOKEN = process.env.GIFFALO_VERIFY_TOKEN;
@@ -14,16 +14,13 @@ const VERIFY_TOKEN = process.env.GIFFALO_VERIFY_TOKEN;
 const createAndSendGif = async ({ senderId, url }) => {
   const giphy = await gif.create(url);
   const text = await fb.messageAsText(senderId, giphy);
-
-  await wait(500);
-
   const attachment = await fb.messageAsAttachment(senderId, giphy);
 
   return { text, attachment };
 };
 
 module.exports = express()
-  // Parse incoming request bodies in a middleware before your handlers
+  // Parse incoming request bodies (makes `req.body` available in handlers)
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }))
   // For testing API
