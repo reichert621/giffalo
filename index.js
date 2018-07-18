@@ -1,11 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { first, reduce } = require('lodash');
-const gif = require('./gif');
-const fb = require('./fb');
-const queue = require('./queue');
-const { wait, isVideo } = require('./utils');
+const gif = require('./helpers/gif');
+const fb = require('./helpers/fb');
+const queue = require('./helpers/queue');
+const { wait, isVideo } = require('./helpers/utils');
 
+const PORT = process.env.PORT || 1337;
 const VERIFY_TOKEN = process.env.GIFFALO_VERIFY_TOKEN;
 
 // Creates a GIPHY gif from the FB url, and sends both the
@@ -104,6 +105,6 @@ module.exports = express()
       });
   })
   // Initializes the server
-  .listen(1337, () => {
-    console.log('Listening on port 1337');
+  .listen(PORT, () => {
+    console.log(`Listening on port ${PORT}`);
   });
